@@ -4,17 +4,26 @@ import (
 	"log"
 )
 
+// Logger interface
 type Logger interface {
 	Log(msg interface{})
+	LogAndExit(msg interface{})
 }
 
-type TextLogger struct {
+type textLogger struct {
 }
 
+// NewLogger creates new object of TextLogger
 func NewLogger() Logger {
-	return &TextLogger{}
+	return &textLogger{}
 }
 
-func (l *TextLogger) Log(msg interface{}) {
+// Log Prints msg
+func (l *textLogger) Log(msg interface{}) {
 	log.Println(msg)
+}
+
+// LogAndExit Prints msg and exits with error code
+func (l *textLogger) LogAndExit(msg interface{}) {
+	log.Fatalln(msg)
 }
