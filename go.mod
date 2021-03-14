@@ -1,3 +1,3 @@
-module github.com/tim-koehler/TimsGoDeps
+module github.com/tim-koehler/TimsLogger
 
-go 1.15
+go 1.16
