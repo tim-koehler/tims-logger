@@ -1,3 +1,3 @@
-module github.com/tim-koehler/TimsLogger
+module github.com/tim-koehler/tims-logger
 
 go 1.16
