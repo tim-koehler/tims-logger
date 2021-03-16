@@ -260,7 +260,7 @@ func (t LogLevel) String() string {
 func (t LogType) String() string {
 	mapping := map[LogType]string{
 		TEXT: "TEXT",
-		JSON: "TEXT",
+		JSON: "JSON",
 	}
 	return mapping[t]
 }
