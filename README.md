@@ -1,4 +1,4 @@
-# TimsLogger
+# TimsLogger [![Tests](https://github.com/tim-koehler/tims-logger/actions/workflows/go.yml/badge.svg)](https://github.com/tim-koehler/tims-logger/actions/workflows/go.yml) [![Coverage Status](https://coveralls.io/repos/github/tim-koehler/tims-logger/badge.svg)](https://coveralls.io/github/tim-koehler/tims-logger) [![Go Report Card](https://goreportcard.com/badge/github.com/tim-koehler/tims-logger)](https://goreportcard.com/report/github.com/tim-koehler/tims-logger)
 
 A logger build for my personal needs. Maybe you will also enjoy it :)
 
