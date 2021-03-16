@@ -49,7 +49,7 @@ func GetLogLevel() LogLevel {
 }
 
 func SetLogType(strLogType string) {
-	switch strings.ToLower(strLogType) {
+	switch strings.ToUpper(strLogType) {
 	case TEXT.String():
 		logType = TEXT
 	case JSON.String():
@@ -185,10 +185,7 @@ func CreateString(level LogLevel, formatString string, v ...interface{}) string 
 }
 
 func checkLogLevel(t LogLevel) bool {
-	if t >= logLevel {
-		return true
-	}
-	return false
+	return t >= logLevel
 }
 
 func getTime() string {
@@ -232,28 +229,20 @@ func getColoredPrefix(t LogLevel) string {
 		if colors {
 			return fmt.Sprintf("\033[0;36m%-10s|\033[0m", fmt.Sprintf("[%s]", t.String()))
 		}
-		break
 	case INFO:
 		if colors {
 			return fmt.Sprintf("\033[1;34m%-10s|\033[0m", fmt.Sprintf("[%s]", t.String()))
 		}
-		break
-
 	case WARNING:
 		if colors {
 			return fmt.Sprintf("\033[1;33m%-10s|\033[0m", fmt.Sprintf("[%s]", t.String()))
 		}
-		break
-
 	case ERROR:
 		if colors {
 			return fmt.Sprintf("\033[1;31m%-10s|\033[0m", fmt.Sprintf("[%s]", t.String()))
 		}
-		break
 	default:
 		return fmt.Sprintf("\033[0;36m%-10s|\033[0m", fmt.Sprintf("[%s]", t.String()))
-
-		break
 	}
 	return fmt.Sprintf("%-10s|", fmt.Sprintf("[%s]", t.String()))
 }
@@ -270,8 +259,8 @@ func (t LogLevel) String() string {
 
 func (t LogType) String() string {
 	mapping := map[LogType]string{
-		TEXT: "text",
-		JSON: "json",
+		TEXT: "TEXT",
+		JSON: "TEXT",
 	}
 	return mapping[t]
 }
