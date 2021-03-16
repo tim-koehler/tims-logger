@@ -1,28 +1,25 @@
+on: [push, pull_request]
 name: Tests
-
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
 jobs:
-
-  build:
+  test:
+    name: Test
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: shogo82148/actions-goveralls@v1
-      with:
-        path-to-profile: profile.cov
-    - name: Set up Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: 1.16
+      - name: Set up Golang
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.15
 
-    - name: Build
-      run: go build -v ./...
+      - name: Check out code
+        uses: actions/checkout@v2
 
-    - name: Test
-      run: go test -v ./...
-   
+      - name: Build
+        run: go build    
+
+      - name: Test
+        run: go test . -timeout 5m -coverprofile=profile.cov
+
+      - name: Coveralls
+        uses: shogo82148/actions-goveralls@v1
+        with:
+          path-to-profile: profile.cov
