@@ -187,22 +187,38 @@ func TestCheckLogLevel(t *testing.T) {
 func TestGetColoredPrefix(t *testing.T) {
 	SetColoredLogs(true)
 
-	type args struct {
-		lvl LogLevel
-	}
 	tests := []struct {
-		name string
-		args args
-		want string
+		name     string
+		logLevel LogLevel
+		want     string
 	}{
-		{"DEBUG", args{lvl: DEBUG}, "\033[0;36m[DEBUG]   |\033[0m"},
-		{"INFO", args{lvl: INFO}, "\033[1;34m[INFO]    |\033[0m"},
-		{"WARNING", args{lvl: WARNING}, "\033[1;33m[WARNING] |\033[0m"},
+		{"DEBUG", DEBUG, "\033[0;36m[DEBUG]   |\033[0m"},
+		{"INFO", INFO, "\033[1;34m[INFO]    |\033[0m"},
+		{"WARNING", WARNING, "\033[1;33m[WARNING] |\033[0m"},
+		{"ERROR", ERROR, "\033[1;31m[ERROR]   |\033[0m"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := getColoredPrefix(tt.args.lvl); got != tt.want {
+			if got := getColoredPrefix(tt.logLevel); got != tt.want {
 				t.Errorf("getColoredPrefix() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestBuildJsonLog(t *testing.T) {
+	tests := []struct {
+		name       string
+		logLevel   LogLevel
+		params     Custom
+		wantSuffix string
+	}{
+		{"DEBUG", DEBUG, Custom{"foo": "bar", "baz": 123}, `"baz":"123","foo":"bar","level":"DEBUG"}`},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := buildJsonLog(tt.logLevel, []interface{}{tt.params}); !strings.HasSuffix(got, tt.wantSuffix) {
+				t.Errorf("getColoredPrefix() = %v, want %v", got, tt.wantSuffix)
 			}
 		})
 	}
@@ -236,24 +252,24 @@ func TestCreateString(t *testing.T) {
 		_args  []interface{}
 	}
 	tests := []struct {
-		name string
-		args args
-		want string
+		name     string
+		args     args
+		wantText string
+		wantJson string
 	}{
-		{
-			"Debug",
-			args{
-				lvl:    DEBUG,
-				format: "%v %s",
-				_args:  []interface{}{200, "Test"},
-			},
-			"\033[0;36m[DEBUG]   |\033[0m 200 Test",
-		},
+		{"Debug", args{lvl: DEBUG, format: "%v %s", _args: []interface{}{200, "Test"}}, "\033[0;36m[DEBUG]   |\033[0m 200 Test", `level":"DEBUG","message":"200 Test"}` + "\n"},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := CreateString(tt.args.lvl, tt.args.format, tt.args._args...); !strings.HasSuffix(got, tt.want) {
-				t.Errorf("CreateString() = %v, want %v", got, tt.want)
+		SetLogType(TEXT.String())
+		t.Run("[TEXT]"+tt.name, func(t *testing.T) {
+			if got := CreateString(tt.args.lvl, tt.args.format, tt.args._args...); !strings.HasSuffix(got, tt.wantText) {
+				t.Errorf("CreateString() = %v, want %v", got, tt.wantText)
+			}
+		})
+		SetLogType(JSON.String())
+		t.Run("[JSON]"+tt.name, func(t *testing.T) {
+			if got := CreateString(tt.args.lvl, tt.args.format, tt.args._args...); !strings.HasSuffix(got, tt.wantJson) {
+				t.Errorf("CreateString() = %v, want %v", got, tt.wantJson)
 			}
 		})
 	}

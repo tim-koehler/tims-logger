@@ -224,27 +224,20 @@ func removeBrackets(v []interface{}) string {
 }
 
 func getColoredPrefix(t LogLevel) string {
+	if !colors {
+		return fmt.Sprintf("%-10s|", fmt.Sprintf("[%s]", t.String()))
+	}
+
 	switch t {
-	case DEBUG:
-		if colors {
-			return fmt.Sprintf("\033[0;36m%-10s|\033[0m", fmt.Sprintf("[%s]", t.String()))
-		}
 	case INFO:
-		if colors {
-			return fmt.Sprintf("\033[1;34m%-10s|\033[0m", fmt.Sprintf("[%s]", t.String()))
-		}
+		return fmt.Sprintf("\033[1;34m%-10s|\033[0m", fmt.Sprintf("[%s]", t.String()))
 	case WARNING:
-		if colors {
-			return fmt.Sprintf("\033[1;33m%-10s|\033[0m", fmt.Sprintf("[%s]", t.String()))
-		}
+		return fmt.Sprintf("\033[1;33m%-10s|\033[0m", fmt.Sprintf("[%s]", t.String()))
 	case ERROR:
-		if colors {
-			return fmt.Sprintf("\033[1;31m%-10s|\033[0m", fmt.Sprintf("[%s]", t.String()))
-		}
-	default:
+		return fmt.Sprintf("\033[1;31m%-10s|\033[0m", fmt.Sprintf("[%s]", t.String()))
+	default: // DEBUG
 		return fmt.Sprintf("\033[0;36m%-10s|\033[0m", fmt.Sprintf("[%s]", t.String()))
 	}
-	return fmt.Sprintf("%-10s|", fmt.Sprintf("[%s]", t.String()))
 }
 
 func (t LogLevel) String() string {
