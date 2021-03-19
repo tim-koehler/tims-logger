@@ -7,8 +7,6 @@ import (
 	"time"
 )
 
-const TIME_FORMAT = "2006-01-02T15:04:05.515-07:00"
-
 const (
 	JSON LogType = "JSON"
 	TEXT LogType = "TEXT"
@@ -28,6 +26,7 @@ type Custom map[string]interface{}
 var logLevel LogLevel = DEBUG
 var logType LogType = TEXT
 var colors bool = true
+var dateFormat = "2006-01-02T15:04:05.515-07:00"
 
 func SetLogLevel(strLogFormat string) {
 	switch strings.ToUpper(strLogFormat) {
@@ -61,6 +60,14 @@ func SetLogType(strLogType string) {
 
 func GetLogType() LogType {
 	return logType
+}
+
+func SetDateFormat(newDateFormat string) {
+	dateFormat = newDateFormat
+}
+
+func GetDateFormat() string {
+	return dateFormat
 }
 
 func SetColoredLogs(enabled bool) {
@@ -189,7 +196,7 @@ func checkLogLevel(t LogLevel) bool {
 }
 
 func getTime() string {
-	return fmt.Sprintf("%30s", time.Now().Format(TIME_FORMAT))
+	return fmt.Sprintf("%30s", time.Now().Format(dateFormat))
 }
 
 func buildJsonLog(lvl LogLevel, v []interface{}) string {
