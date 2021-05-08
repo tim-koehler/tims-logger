@@ -247,6 +247,9 @@ func getColoredPrefix(t LogLevel) string {
 	}
 }
 
+// ParseLogLevel returns the matching LogLevel.
+// Input is not case sensitive.
+// When empty INFO will be returned
 func ParseLogLevel(input string) LogLevel {
 	switch strings.ToUpper(input) {
 	case "DEBUG":
@@ -261,6 +264,9 @@ func ParseLogLevel(input string) LogLevel {
 	return INFO
 }
 
+// ParseLogType returns the matching LogType.
+// Input is not case sensitive.
+// When empty TEXT will be returned
 func ParseLogType(input string) LogType {
 	switch strings.ToUpper(input) {
 	case "TEXT":
