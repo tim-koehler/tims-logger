@@ -247,6 +247,30 @@ func getColoredPrefix(t LogLevel) string {
 	}
 }
 
+func ParseLogLevel(input string) LogLevel {
+	switch strings.ToUpper(input) {
+	case "DEBUG":
+		return DEBUG
+	case "INFO":
+		return INFO
+	case "WARNING":
+		return WARNING
+	case "ERROR":
+		return ERROR
+	}
+	return INFO
+}
+
+func ParseLogType(input string) LogType {
+	switch strings.ToUpper(input) {
+	case "TEXT":
+		return TEXT
+	case "JSON":
+		return JSON
+	}
+	return TEXT
+}
+
 func (t LogLevel) String() string {
 	mapping := map[LogLevel]string{
 		DEBUG:   "DEBUG",

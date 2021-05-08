@@ -274,3 +274,43 @@ func TestCreateString(t *testing.T) {
 		})
 	}
 }
+
+func TestParseLogLevel(t *testing.T) {
+	tests := []struct {
+		input        string
+		wantLogLevel LogLevel
+	}{
+		{"debug", DEBUG},
+		{"Info", INFO},
+		{"WaRnING", WARNING},
+		{"ERROR", ERROR},
+		{"Fooo", INFO},
+	}
+	for _, tt := range tests {
+		t.Run(tt.input, func(t *testing.T) {
+			if got := ParseLogLevel(tt.input); got != tt.wantLogLevel {
+				t.Errorf("ParseLogLevel(%v), want %v", got, tt.wantLogLevel)
+			}
+		})
+	}
+}
+
+func TestParseLogType(t *testing.T) {
+	tests := []struct {
+		input       string
+		wantLogType LogType
+	}{
+		{"text", TEXT},
+		{"TeXt", TEXT},
+		{"JSON", JSON},
+		{"jsON", JSON},
+		{"foo", TEXT},
+	}
+	for _, tt := range tests {
+		t.Run(tt.input, func(t *testing.T) {
+			if got := ParseLogType(tt.input); got != tt.wantLogType {
+				t.Errorf("ParseLogType(%v), want %v", got, tt.wantLogType)
+			}
+		})
+	}
+}
