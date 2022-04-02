@@ -75,15 +75,7 @@ func SetColoredLogs(enabled bool) {
 }
 
 func Debugln(v ...interface{}) {
-	if !checkLogLevel(DEBUG) {
-		return
-	}
-	if logType == TEXT {
-		coloredPrefix := getColoredPrefix(DEBUG)
-		fmt.Println(getTime(), coloredPrefix, removeBrackets(v))
-	} else {
-		fmt.Println(buildJsonLog(DEBUG, v))
-	}
+	Debugf("%v", removeBrackets(v))
 }
 
 func Debugf(formatString string, v ...interface{}) {
@@ -101,15 +93,7 @@ func Debugf(formatString string, v ...interface{}) {
 }
 
 func Infoln(v ...interface{}) {
-	if !checkLogLevel(INFO) {
-		return
-	}
-	if logType == TEXT {
-		coloredPrefix := getColoredPrefix(INFO)
-		fmt.Println(getTime(), coloredPrefix, removeBrackets(v))
-	} else {
-		fmt.Println(buildJsonLog(INFO, v))
-	}
+	Infof("%v", removeBrackets(v))
 }
 
 func Infof(formatString string, v ...interface{}) {
@@ -127,15 +111,7 @@ func Infof(formatString string, v ...interface{}) {
 }
 
 func Warningln(v ...interface{}) {
-	if !checkLogLevel(WARNING) {
-		return
-	}
-	if logType == TEXT {
-		coloredPrefix := getColoredPrefix(WARNING)
-		fmt.Println(getTime(), coloredPrefix, removeBrackets(v))
-	} else {
-		fmt.Println(buildJsonLog(WARNING, v))
-	}
+	Warningf("%v", removeBrackets(v))
 }
 
 func Warningf(formatString string, v ...interface{}) {
@@ -153,15 +129,7 @@ func Warningf(formatString string, v ...interface{}) {
 }
 
 func Errorln(v ...interface{}) {
-	if !checkLogLevel(ERROR) {
-		return
-	}
-	if logType == TEXT {
-		coloredPrefix := getColoredPrefix(ERROR)
-		fmt.Println(getTime(), coloredPrefix, removeBrackets(v))
-	} else {
-		fmt.Println(buildJsonLog(ERROR, v))
-	}
+	Errorf("%v", removeBrackets(v))
 }
 
 func Errorf(formatString string, v ...interface{}) {

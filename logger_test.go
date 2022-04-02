@@ -111,8 +111,8 @@ func TestAllPrints(t *testing.T) {
 		{"Errorf", func() { Errorf("%s and %s & %s", "Foo", "Bar", "BAZ") }, "[ERROR]   | Foo and Bar & BAZ\n", `"level":"ERROR","message":"Foo and Bar \u0026 BAZ"}` + "\n"},
 	}
 
-	t.Logf("%v", os.Stdout)
 	rescueStdout := os.Stdout
+	SetColoredLogs(false)
 
 	for _, tt := range tests {
 		SetLogType(TEXT.String())
