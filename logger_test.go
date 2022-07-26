@@ -274,3 +274,38 @@ func TestCreateString(t *testing.T) {
 		})
 	}
 }
+
+func TestPrettyPrintJson(t *testing.T) {
+	x := struct {
+		Foo string
+		Bar struct {
+			Baz string
+		}
+	}{
+		Foo: "test",
+		Bar: struct{ Baz string }{
+			Baz: "test2",
+		},
+	}
+
+	xx := map[string]string{
+		"a": "b",
+		"c": "d",
+	}
+
+	if !strings.EqualFold(PrettyPrintJson(xx), `{
+    "a": "b",
+    "c": "d"
+}`) {
+		t.Errorf("not equal")
+	}
+
+	if !strings.EqualFold(PrettyPrintJson(x), `{
+    "Foo": "test",
+    "Bar": {
+        "Baz": "test2"
+    }
+}`) {
+		t.Errorf("not equal")
+	}
+}

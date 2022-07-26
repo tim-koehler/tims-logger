@@ -21,7 +21,7 @@ const (
 
 type LogType string
 type LogLevel int
-type Custom map[string]interface{}
+type Custom map[string]any
 
 var logLevel LogLevel = DEBUG
 var logType LogType = TEXT
@@ -74,11 +74,11 @@ func SetColoredLogs(enabled bool) {
 	colors = enabled
 }
 
-func Debugln(v ...interface{}) {
+func Debugln(v ...any) {
 	Debugf("%v", removeBrackets(v))
 }
 
-func Debugf(formatString string, v ...interface{}) {
+func Debugf(formatString string, v ...any) {
 	if !checkLogLevel(DEBUG) {
 		return
 	}
@@ -88,15 +88,15 @@ func Debugf(formatString string, v ...interface{}) {
 		fmt.Println(getTime(), coloredPrefix, str)
 	} else {
 		str := fmt.Sprintf(formatString, v...)
-		fmt.Println(buildJsonLog(DEBUG, []interface{}{str}))
+		fmt.Println(buildJsonLog(DEBUG, []any{str}))
 	}
 }
 
-func Infoln(v ...interface{}) {
+func Infoln(v ...any) {
 	Infof("%v", removeBrackets(v))
 }
 
-func Infof(formatString string, v ...interface{}) {
+func Infof(formatString string, v ...any) {
 	if !checkLogLevel(INFO) {
 		return
 	}
@@ -106,15 +106,15 @@ func Infof(formatString string, v ...interface{}) {
 		fmt.Println(getTime(), coloredPrefix, str)
 	} else {
 		str := fmt.Sprintf(formatString, v...)
-		fmt.Println(buildJsonLog(INFO, []interface{}{str}))
+		fmt.Println(buildJsonLog(INFO, []any{str}))
 	}
 }
 
-func Warningln(v ...interface{}) {
+func Warningln(v ...any) {
 	Warningf("%v", removeBrackets(v))
 }
 
-func Warningf(formatString string, v ...interface{}) {
+func Warningf(formatString string, v ...any) {
 	if !checkLogLevel(WARNING) {
 		return
 	}
@@ -124,15 +124,15 @@ func Warningf(formatString string, v ...interface{}) {
 		fmt.Println(getTime(), coloredPrefix, str)
 	} else {
 		str := fmt.Sprintf(formatString, v...)
-		fmt.Println(buildJsonLog(WARNING, []interface{}{str}))
+		fmt.Println(buildJsonLog(WARNING, []any{str}))
 	}
 }
 
-func Errorln(v ...interface{}) {
+func Errorln(v ...any) {
 	Errorf("%v", removeBrackets(v))
 }
 
-func Errorf(formatString string, v ...interface{}) {
+func Errorf(formatString string, v ...any) {
 	if !checkLogLevel(ERROR) {
 		return
 	}
@@ -142,11 +142,11 @@ func Errorf(formatString string, v ...interface{}) {
 		fmt.Println(getTime(), coloredPrefix, str)
 	} else {
 		str := fmt.Sprintf(formatString, v...)
-		fmt.Println(buildJsonLog(ERROR, []interface{}{str}))
+		fmt.Println(buildJsonLog(ERROR, []any{str}))
 	}
 }
 
-func CreateString(level LogLevel, formatString string, v ...interface{}) string {
+func CreateString(level LogLevel, formatString string, v ...any) string {
 	result := ""
 	if logType == TEXT {
 		str := fmt.Sprintf(formatString, v...)
@@ -154,9 +154,17 @@ func CreateString(level LogLevel, formatString string, v ...interface{}) string 
 		result = fmt.Sprintf("%s %s %s", getTime(), coloredPrefix, str)
 	} else {
 		str := fmt.Sprintf(formatString, v...)
-		result = fmt.Sprintln(buildJsonLog(level, []interface{}{str}))
+		result = fmt.Sprintln(buildJsonLog(level, []any{str}))
 	}
 	return result
+}
+
+func PrettyPrintJson(v any) string {
+	out, err := json.MarshalIndent(v, "", "    ")
+	if err != nil {
+		return err.Error()
+	}
+	return string(out)
 }
 
 func checkLogLevel(t LogLevel) bool {
@@ -167,7 +175,7 @@ func getTime() string {
 	return fmt.Sprintf("%30s", time.Now().Format(dateFormat))
 }
 
-func buildJsonLog(lvl LogLevel, v []interface{}) string {
+func buildJsonLog(lvl LogLevel, v []any) string {
 	var data []byte
 	for _, val := range v {
 		if customMap, ok := val.(Custom); ok {
@@ -192,7 +200,7 @@ func buildJsonLog(lvl LogLevel, v []interface{}) string {
 	return string(data)
 }
 
-func removeBrackets(v []interface{}) string {
+func removeBrackets(v []any) string {
 	str := fmt.Sprintf("%v", v)
 	str = strings.TrimPrefix(str, "[")
 	return strings.TrimSuffix(str, "]")
